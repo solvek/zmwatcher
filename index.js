@@ -62,7 +62,7 @@ function watchNode(node, childName){
 
     if (!node.fswatcher){
         node.fswatcher = fs.watch(node.path, (event, name) => {
-            console.log(`event is: ${event}`);
+            //console.log(`event is: ${event}`);
             if (event == "rename"){
                 var subdir = path.join(node.path, name);
                 var stat = fs.statSync(subdir);

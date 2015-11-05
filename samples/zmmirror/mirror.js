@@ -43,7 +43,12 @@ function processQueue() {
     var task = queue.pop();
     console.log(`Copying from ${task.src} to ${task.dst}`);
     fs.copy(task.src, task.dst, (err) => {
-        if (err) console.error(err);
+        if (err){
+            console.error(err);
+        }
+        else {
+            console.log(`File ${task.src} is copied`);
+        }
         processQueue();
     });
 }
