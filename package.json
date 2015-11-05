@@ -1,0 +1,20 @@
+{
+  "name": "zm-watcher",
+  "version": "0.0.1",
+  "description": "Library provides possibility to watch for new files in ZoneMinder events directory (per camera)",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/solvek/zmwatcher.git"
+  },
+  "keywords": [
+    "zoneminder",
+    "zm",
+    "watcher"
+  ],
+  "author": "Sergi Adamchuk <sergi79@ukr.net> (http://solvek.com/)",
+  "license": "BSD-2-Clause",
+  "bugs": {
+    "url": "https://github.com/solvek/zmwatcher/issues"
+  }
+}
