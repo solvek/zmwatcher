@@ -49,7 +49,8 @@ eventEmitter.on(processQueueEvent, function(){
     }
 
     isBusy = true;
-    var task = queue.pop();
+    //var task = queue.pop(); // Prefer to upload the most recent files first but this leads to corrupted images
+    var task = queue.shift();
     console.log(`Copying from ${task.src} to ${task.dst}`);
     fs.copy(task.src, task.dst, (err) => {
         if (err){
