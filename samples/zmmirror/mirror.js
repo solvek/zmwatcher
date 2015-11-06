@@ -66,13 +66,17 @@ eventEmitter.on(processQueueEvent, function(){
 for (var item of config) {
     for (var monitor of item.subPaths) {
         zmwatcher.watch(item.basePath, monitor, (filePath) => {
-            console.log(`Created file ${filePath}`);
-            var task = {
-                src: path.join(item.basePath, filePath),
-                dst: path.join(item.destinationPath, filePath)
-            };
-            queue.push(task);
-            eventEmitter.emit(processQueueEvent);
+            //console.log(`Created file ${filePath}`);
+
+            var baseName = path.basename(filePath);
+            if (baseName.endsWith("capture.jpg")) {
+                var task = {
+                    src: path.join(item.basePath, filePath),
+                    dst: path.join(item.destinationPath, filePath)
+                };
+                queue.push(task);
+                eventEmitter.emit(processQueueEvent);
+            }
         });
     }
 }
