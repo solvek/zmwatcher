@@ -7,7 +7,8 @@ function getDateNumber(year, month, day){
     return date.getTime() / (24*60*60*1000);
 }
 
-var directories = ["/media/data/big_storage/Temp/dst"];
+//var directories = ["/media/data/big_storage/Temp/dst"];
+var directories = ["/home/sergi/box.com/Cameras/Home"];
 // Cleanup all content older then 3 days
 var deleteOlderThen = getDateNumber(new Date())-3;
 var simulateDeletion = false;
