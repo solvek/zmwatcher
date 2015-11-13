@@ -1,3 +1,7 @@
+var fs = require("fs");
+var path = require("path");
+var config = require("./config.js");
+
 function getDateNumber(year, month, day){
     date = year;
     if (arguments.length > 1){
@@ -7,14 +11,7 @@ function getDateNumber(year, month, day){
     return date.getTime() / (24*60*60*1000);
 }
 
-//var directories = ["/media/data/big_storage/Temp/dst"];
-var directories = ["/home/sergi/box.com/Cameras/Home"];
-// Cleanup all content older then 3 days
-var deleteOlderThen = getDateNumber(new Date())-3;
-var simulateDeletion = false;
-
-var fs = require("fs");
-var path = require("path");
+var deleteOlderThen = getDateNumber(config.deleteOlderThen);
 
 function deleteItem(subPath){
     var stat = fs.statSync(subPath);
@@ -33,7 +30,7 @@ function deleteItem(subPath){
 
 function checkItem(subPath, date){
     if (date < deleteOlderThen){
-        if (simulateDeletion){
+        if (config.simulateDeletion){
             console.log(`Item ${subPath} deleted (simulation only)`);
         }
         else {
@@ -52,7 +49,7 @@ function getDaysInMonth(year, month){
 
 var year, month, day, yearPath, monthPath, dayPath;
 
-for(var dir of directories){
+for(var dir of config.deleteDirs){
     for(var yearDir of fs.readdirSync(dir)){
         year = 2000+parseInt(yearDir);
         yearPath = path.join(dir, yearDir);

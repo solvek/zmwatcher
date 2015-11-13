@@ -2,35 +2,11 @@
 
 var path = require("path");
 var fs = require('fs');
-var os = require("os");
 var util = require("util");
 var events = require('events');
+var config = require("./config.js");
 
 var zmwatcher = require("../..");
-
-var configs = {
-  SolvekServer:[
-      {
-          basePath: "/media/data/zoneminder/events",
-          subPaths: ["Home"],
-          destinationPath: "/home/sergi/box.com/Cameras"
-      }
-  ],
-  SolvekPC: [
-      {
-          basePath: "/media/data/big_storage/Temp",
-          subPaths: ["src"],
-          destinationPath: "/media/data/big_storage/Temp/dst"
-      }
-  ]
-};
-
-const FILTER_FILES = false;
-const MIN_FILE_SIZE = 60000;
-
-var config = configs[os.hostname()];
-
-console.log(`Your hostname is ${os.hostname()}, current config ${util.inspect(config)}`);
 
 var queue = [];
 var isBusy = false;
@@ -122,7 +98,7 @@ eventEmitter.on(processQueueEvent, function(){
     //var task = queue.shift();
 
     var stat = fs.statSync(task.src); // If the top file is still in progress
-    if (stat.size < MIN_FILE_SIZE && queue.length>0){
+    if (stat.size < config.minFileSize && queue.length>0){
         var task2 = task;
         task = queue.pop();
         queue.push(task2);
@@ -143,13 +119,13 @@ eventEmitter.on(processQueueEvent, function(){
 
 console.log("Watchers setup...");
 
-for (var item of config) {
+for (var item of config.paths) {
     for (var monitor of item.subPaths) {
         zmwatcher.watch(item.basePath, monitor, (filePath) => {
             //console.log(`Created file ${filePath}`);
 
             var baseName = path.basename(filePath);
-            if (!FILTER_FILES || baseName.endsWith("capture.jpg")) {
+            if (!config.filterFiles || baseName.endsWith("capture.jpg")) {
                 var task = {
                     src: path.join(item.basePath, filePath),
                     dst: path.join(item.destinationPath, filePath)
