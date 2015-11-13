@@ -5,7 +5,7 @@ deleteOlderThen.setDate(deleteOlderThen.getDate() - 3);
 
 var config = {
     filterFiles: true,
-    minFileSize: 60000,
+    copyTimeout: 500,
     paths: [
         {
             basePath: "/media/data/zoneminder/events",

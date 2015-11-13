@@ -95,15 +95,7 @@ eventEmitter.on(processQueueEvent, function(){
 
     isBusy = true;
 
-    var idx, stat, task = null;
-    for (idx = queue.length-1; idx>=0;idx--){
-        task = queue[idx];
-        stat = fs.statSync(task.src);
-        if (stat.size > config.minFileSize) break;
-    }
-
-    if (idx < 0) idx = 0;
-    queue.splice(idx, 1);
+    var task = queue.pop();
 
     console.log(`Copying from ${task.src} to ${task.dst}`);
     fileCopy(task.src, task.dst, (err) => {
@@ -127,12 +119,14 @@ for (var item of config.paths) {
 
             var baseName = path.basename(filePath);
             if (!config.filterFiles || baseName.endsWith("capture.jpg")) {
-                var task = {
-                    src: path.join(item.basePath, filePath),
-                    dst: path.join(item.destinationPath, filePath)
-                };
-                queue.push(task);
-                eventEmitter.emit(processQueueEvent);
+                setTimeout(function(){
+                    var task = {
+                        src: path.join(item.basePath, filePath),
+                        dst: path.join(item.destinationPath, filePath)
+                    };
+                    queue.push(task);
+                    eventEmitter.emit(processQueueEvent);
+                }, config.copyTimeout);
             }
         });
     }
