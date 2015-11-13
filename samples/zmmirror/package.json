@@ -2,5 +2,8 @@
   "name": "mirror-zm",
   "version": "0.1.0",
   "description": "Allows to mirror new zone minder content to other location",
-  "author": "Sergi Adamchuk <sergi79@ukr.net>"
+  "author": "Sergi Adamchuk <sergi79@ukr.net>",
+  "dependencies": {
+    "fs-extra": ">=0.26.0"
+  }
 }
