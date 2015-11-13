@@ -1,7 +1,7 @@
 // Mirrors zone minder monitors to other location
 
 var path = require("path");
-var fs = require('fs');
+var fs = require('fs-extra');
 var util = require("util");
 var events = require('events');
 var config = require("./config.js");
@@ -14,72 +14,6 @@ var isBusy = false;
 var eventEmitter = new events.EventEmitter();
 
 const processQueueEvent = "processQueue";
-
-function makeDirs(dirsPath){
-    var parts = [];
-    var part;
-    while(!fs.existsSync(dirsPath)){
-        part = path.basename(dirsPath);
-        dirsPath = path.dirname(dirsPath);
-        parts.push(part);
-    }
-
-    while(parts.length > 0){
-        part = parts.pop();
-        dirsPath = path.join(dirsPath, part);
-        fs.mkdir(dirsPath);
-    }
-}
-
-function fileCopy(from, to, callback){
-    makeDirs(path.dirname(to));
-
-    console.log("Opening file for reading");
-    var rr = fs.createReadStream(from, { flags: 'r+'});
-    console.log("Opening file for writing");
-    var ww = fs.createWriteStream(to);
-
-    rr.on("end", ()=> {
-        console.log("End of file achieved");
-        rr.close();
-        ww.close();
-        callback();
-    });
-
-    rr.on("readable", () => {
-        var chunk;
-        while (null !== (chunk = rr.read())) {
-            console.log(`got ${chunk.length} bytes of data`);
-            ww.write(chunk);
-        }
-    });
-
-    rr.on("error", callback);
-}
-
-// File copying testing
-//var file = "/media/data/big_storage/Temp/Gippenreiter2.fb2";
-//var file2 = file+".c2";
-//var file3 = file+".c3";
-//
-//if (fs.existsSync(file2)){
-//    fs.unlinkSync(file2);
-//}
-//
-//if (fs.existsSync(file3)){
-//    fs.unlinkSync(file3);
-//}
-//
-//fileCopy(file, file2, () =>{});
-//
-//fileCopy(file2, file3, (err) =>{
-//    if (err){
-//        console.log(`Error while copying: ${err}`);
-//    }
-//    else{
-//        console.log("Cuccessfully copied");
-//    }
-//});
 
 eventEmitter.on(processQueueEvent, function(){
     if (queue.length == 0) {
@@ -98,7 +32,7 @@ eventEmitter.on(processQueueEvent, function(){
     var task = queue.pop();
 
     console.log(`Copying from ${task.src} to ${task.dst}`);
-    fileCopy(task.src, task.dst, (err) => {
+    fs.copy(task.src, task.dst, (err) => {
         if (err){
             console.error(err);
         }
