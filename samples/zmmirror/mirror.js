@@ -94,15 +94,16 @@ eventEmitter.on(processQueueEvent, function(){
     }
 
     isBusy = true;
-    var task = queue.pop(); // Prefer to upload the most recent files first but this leads to corrupted images
-    //var task = queue.shift();
 
-    var stat = fs.statSync(task.src); // If the top file is still in progress
-    if (stat.size < config.minFileSize && queue.length>0){
-        var task2 = task;
-        task = queue.pop();
-        queue.push(task2);
+    var idx, stat, task = null;
+    for (idx = queue.length-1; idx>=0;idx--){
+        task = queue[idx];
+        stat = fs.statSync(task.src);
+        if (stat.size > config.minFileSize) break;
     }
+
+    if (idx < 0) idx = 0;
+    queue.splice(idx, 1);
 
     console.log(`Copying from ${task.src} to ${task.dst}`);
     fileCopy(task.src, task.dst, (err) => {
