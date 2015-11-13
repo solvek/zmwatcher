@@ -1,15 +1,15 @@
 zm-watcher
 =========
 
-Library provides possibility to watch for new files in [ZoneMinder|http://www.zoneminder.com/] events directory (per camera).
+Library provides possibility to watch for new files in [ZoneMinder](http://www.zoneminder.com/) events directory (per camera).
 The purposes of this library to trigger new ZM event in real time.
-[For example you can mirror files to another local directory or even to box.com cloud service.|http://blog.solvek.com/2015/11/zoneminder-mirror.html]
+[For example you can mirror files to another local directory or even to box.com cloud service.](http://blog.solvek.com/2015/11/zoneminder-mirror.html)
 
 The library was tested with node.js 5 but it should work starting from node.js 0.12.x
 
 ## Installation
 
-    npm installe zm-watcher
+    npm install zm-watcher
     
 ## Usage
 
