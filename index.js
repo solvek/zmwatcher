@@ -62,9 +62,16 @@ function watchNode(node, childName){
 
     if (!node.fswatcher){
         node.fswatcher = fs.watch(node.path, (event, name) => {
-            //console.log(`event is: ${event}`);
+            //console.log(`event is: ${event}, name: ${name}`);
             if (event == "rename"){
                 var subdir = path.join(node.path, name);
+                try {
+                    fs.accessSync(subdir, fs.R_OK);
+                }
+                catch(e){
+                    console.log(`File ${subdir} does not exist anymore`);
+                    return;
+                }
                 var stat = fs.statSync(subdir);
                 if (stat.isDirectory()){
                     watchNode(node, name);
