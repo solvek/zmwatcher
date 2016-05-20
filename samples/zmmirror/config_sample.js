@@ -9,7 +9,7 @@ var config = {
     paths: [
         {
             basePath: "/media/data/zoneminder/events", // Base directory of ZM events
-            subPaths: ["Home"], // List of cameras to watch (can be either camera numbers "1", "2" etc or camera's name
+            subPaths: ["Home", "Corridor"], // List of cameras to watch (can be either camera numbers "1", "2" etc or camera's name
             destinationPath: "/home/sergi/box.com/Cameras" // The path where to mirror (this path is mounted for my box.com account)
         }],
 
